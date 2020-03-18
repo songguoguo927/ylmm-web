@@ -1,5 +1,5 @@
 <template>
-      <div>
+  <div style="margin:50px">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>「许愿系统」公示栏</span>
@@ -16,7 +16,7 @@
       </div>
       <ul>
         <li>每日凌晨5点检查一次</li>
-      <li>如果第一名发生了变换，现任老婆会发生变换</li>
+        <li>如果第一名发生了变换，现任老婆会发生变换</li>
       </ul>
     </el-card>
 
@@ -67,7 +67,7 @@
         <li>可自选股功能，可以在股票详情页选择，然后在首页快速寻找</li>
       </ul>
     </el-card>
-    
+
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>大幅放宽了交易限制</span>
@@ -91,8 +91,8 @@
 </template>
 <script>
 export default {
-  name: 'Post'
-}
+  name: "Post"
+};
 </script>
 <style>
 .text {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="">
     <el-menu
       :default-active="activeIndex"
       class="el-menu-demo"
@@ -44,3 +44,8 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+ul.el-menu-demo{
+  padding-left:30px;
+}
+</style>

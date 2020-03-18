@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-radio-group v-model="radio" style="margin-bottom: 30px;" @change="handleClick">
+  <div style="margin:30px">
+    <el-radio-group v-model="radio" style="margin-bottom: 20px;" @change="handleClick">
       <el-radio-button label="popular-sort">热门排序</el-radio-button>
       <el-radio-button label="market-value-sort">市值排序</el-radio-button>
       <el-radio-button label="high-price-in">高价收购</el-radio-button>

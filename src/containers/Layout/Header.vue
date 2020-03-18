@@ -1,12 +1,10 @@
 <template>
   <div style="margin-bottom:20px">
-    <!-- <div class="lunbo">
+    <div class="lunbo">
       <div class="lunbo-title">
-        <p>恭喜你 发现一枚宝藏up</p>
-        <p>愿你不枉此行</p>
-        <a href="jiaru">赶紧加入收藏夹</a>
+        <p>恭喜你 发现一枚宝藏up 愿你不枉此行</p>
       </div>
-    </div> -->
+    </div>
     <Menu />
   </div>
 </template>
@@ -24,7 +22,7 @@ export default {
 .lunbo {
   min-width: 378px;
   background-size: cover;
-  height: calc(30vmin);
+  height: 60px;
   color: #fff;
   text-align: center;
   font-weight: 600;

@@ -1,5 +1,5 @@
 <template>
-    <div>Richer--援力排行榜</div>
+    <div style="margin:50px">Richer--援力排行榜</div>
 </template>
 <script>
 export default {

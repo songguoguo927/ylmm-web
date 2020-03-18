@@ -5,11 +5,9 @@ import App from './App.vue';
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import './index.css'
-// import ElementUI from 'element-ui';
-// import { Button, Select } from 'element-ui';
+
 import 'element-ui/lib/theme-chalk/index.css';
-// import '../node_modules/element-ui/lib/theme-default/index.css'
-import locale from 'element-ui/lib/locale/lang/en'
+// import locale from 'element-ui/lib/locale/lang/en'
 import './element.js'
 NProgress.configure({     
   easing: 'ease',  // 动画方式    

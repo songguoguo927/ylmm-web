@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="padding: 40px;">
+  <div class="container">
     <MHeader />
     <router-view></router-view>
     <!-- <MFooter /> -->

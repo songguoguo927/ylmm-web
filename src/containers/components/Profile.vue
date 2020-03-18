@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin:50px">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>总览</span>

@@ -1,5 +1,5 @@
 <template>
-    <div>Detail
+    <div style="margin:30px">Detail
         {{$route.query.id}}
     </div>
 </template>

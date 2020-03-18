@@ -51,8 +51,8 @@ export default new Router({
       },
       {
         path: '/profile',
-        name: 'AssetsList',
-        component: () => import('../containers/components/AssetsList.vue')
+        name: 'Profile',
+        component: () => import('../containers/components/Profile.vue')
       },
       {
         path: '/orders',

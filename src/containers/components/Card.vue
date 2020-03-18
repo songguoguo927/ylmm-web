@@ -45,9 +45,16 @@ export default {
     height: 100%;
     object-fit: cover;
     cursor: pointer;
+    /* box-shadow: 5px -5px 5px gray;*/
+     border-radius:  5px 5px 0 0 ;
+     box-shadow: 0 0 15px rgba(0, 0, 0, 0.08)
   }
   .detail{
-    margin:15px;
+    border: 1px solid #F0F0F0;
+    border-top:none;
+    border-radius: 0 0 5px 5px ;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    padding: 10px;
   }
   p,span{
     cursor: default;

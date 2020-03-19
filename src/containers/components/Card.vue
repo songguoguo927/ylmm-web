@@ -10,9 +10,9 @@
   <div class="detail">
     <p style="margin-bottom:15px">易烊千玺</p>
     <div style="display:flex;justify-content: space-between;">
-      <span>62617.00</span>
-      <span style="color:#f56c6c">+31208.50%</span>
-      <span style="color:#409eff;cursor:pointer" @click="handleClickCoverToDetail">查看详情</span>
+      <div><span style="margin-right:10px">62617.00</span>
+      <span style="color:#f56c6c">+31208.50%</span></div>
+      <span style="color:rgba(102,52,153,0.8);cursor:pointer" @click="handleClickCoverToDetail">查看详情</span>
     </div>
   </div>
   </div>

@@ -1,21 +1,13 @@
 <template>
-  <div style="margin-bottom:20px">
-    <div class="lunbo">
-      <div class="lunbo-title">
-        <p>恭喜你 发现一枚宝藏up 愿你不枉此行</p>
-      </div>
+  <div class="lunbo">
+    <div class="lunbo-title">
+      <p>恭喜你 发现一枚宝藏up 愿你不枉此行</p>
     </div>
-    <Menu />
   </div>
 </template>
 <script>
-import Menu from "./components/Menu.vue";
-
 export default {
-  name: "header",
-  components: {
-    Menu
-  }
+  name: "header"
 };
 </script>
 <style lang="scss" scoped>

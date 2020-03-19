@@ -1,9 +1,9 @@
 <template>
-  <div style="">
+  <div style="">    
+    <!--mode="horizontal"-->
     <el-menu
       :default-active="activeIndex"
       class="el-menu-demo"
-      mode="horizontal"
       @select="handleSelect"
       router
     >
@@ -46,6 +46,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 ul.el-menu-demo{
-  padding-left:30px;
+  // padding-left:30px;
 }
 </style>

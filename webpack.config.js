@@ -75,11 +75,19 @@ var config = {
   devServer: {
     contentBase: path.join(__dirname, "public"),
     compress: true, // 是否压缩
-    port: 9001, // 启动服务端口
+    port: 9000, // 启动服务端口
     hot: true, // 是否自动刷新
     open: true, // 是否启动服务后，自动打开浏览器
     historyApiFallback: {
       index: "/index.html" //solve vue-router设置mode为history页面报Cannot Get
+    },
+    proxy: {
+      '/api': {
+        target: 'http://47.100.222.240:3000/',
+        // pathRewrite: {'^/api' : ''},
+        // changeOrigin: true,     // target是域名的话，需要这个参数，
+        secure: false,          // 设置支持https协议的代理
+      },
     }
   }
 };

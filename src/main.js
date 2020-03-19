@@ -1,14 +1,24 @@
 import Vue from 'vue';
 import router from './router';
 import store from './store'
+// import api from './request/api'
+import Axios from 'axios'
 import App from './App.vue';
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import './index.css'
 
 import 'element-ui/lib/theme-chalk/index.css';
-// import locale from 'element-ui/lib/locale/lang/en'
+import lang from 'element-ui/lib/locale/lang/en'
+import locale from 'element-ui/lib/locale'
+
 import './element.js'
+import './element-variables.scss'
+// Vue.use(api)
+
+Vue.prototype.$axios = Axios
+// 设置语言
+locale.use(lang)
 NProgress.configure({     
   easing: 'ease',  // 动画方式    
   speed: 500,  // 递增进度条的速度    
@@ -28,8 +38,7 @@ router.afterEach(() => {
   // 在即将进入新的页面组件前，关闭掉进度条
   NProgress.done()
 })
-// Vue.component(Button.name, Button);
-// Vue.component(Select.name, Select);
+
 // Vue.use(ElementUI );//, { size: 'small', zIndex: 3000,locale }
 new Vue({
   el: '#app',

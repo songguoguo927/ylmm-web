@@ -9,14 +9,17 @@
       label-width="100px"
       class="demo-ruleForm"
     >
-      <el-form-item label="昵称" prop="pass">
-        <el-input type="name" v-model="ruleForm.pass" autocomplete="off"></el-input>
+      <el-form-item label="昵称" prop="name">
+        <el-input type="text" v-model="ruleForm['name']" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="checkPass">
-        <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+      <el-form-item label="昵称" prop="nick_name">
+        <el-input type="text" v-model="ruleForm['nick_name']" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="确认密码" prop="checkPass">
-        <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+      <el-form-item label="密码" prop="password">
+        <el-input type="password" v-model="ruleForm['password']" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="确认密码" prop="password_confirmation">
+        <el-input type="password" v-model="ruleForm['password_confirmation']" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
@@ -27,6 +30,7 @@
   </div>
 </template>
 <script>
+import { createUser } from "@/request/api";
 
 export default {
   data() {
@@ -67,14 +71,19 @@ export default {
     };
     return {
       ruleForm: {
-        pass: "",
-        checkPass: "",
-        age: ""
+        name: "xsy",
+        nick_name: "xsy",
+        password:"xsy",
+        password_confirmation: "xsy"
       },
       rules: {
-        pass: [{ validator: validatePass, trigger: "blur" }],
-        checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        age: [{ validator: checkAge, trigger: "blur" }]
+        // pass: [{ validator: validatePass, trigger: "blur" }],
+        // checkPass: [{ validator: validatePass2, trigger: "blur" }],
+        // age: [{ validator: checkAge, trigger: "blur" }]
+        name: [],
+        nick_name: [],
+        password:[],
+        password_confirmation:[]
       }
     };
   },
@@ -92,6 +101,13 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
+  },
+  mounted(){
+    createUser(this.ruleForm).then(res=>{
+        console.log('user',res)
+      }).catch(error=>{
+        console.log(error)
+      })
   }
 };
 </script>

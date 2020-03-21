@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import { apiLogin,apiUser,apiStock } from "@/request/api";
+import { apiLogin,apiUser} from "@/request/api";
 export default {
   data() {
     var checkAge = (rule, value, callback) => {
@@ -102,11 +102,7 @@ export default {
       }).catch(error=>{
         console.log(error)
       })
-      // apiStock().then(res=>{//allstock
-      //   console.log(res)
-      // }).catch(error=>{
-      //   console.log(error)
-      // })
+      
     }
   },
   created(){

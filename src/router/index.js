@@ -30,7 +30,7 @@ export default new Router({
         // meta: { allowBack: false }
       },
       {
-        path: '/detail',
+        path: '/detail/:code',
         name: 'Detail',
         component: () => import('../containers/Detail.vue')
       },

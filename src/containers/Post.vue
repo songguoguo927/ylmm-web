@@ -5,7 +5,7 @@
         <span>「许愿系统」公示栏</span>
       </div>
       <!-- TODO数字显示做成动态的 -->
-      <div>当前难度：24</div>
+      <div>当前难度：{{dataPost.hard}}</div>
       <div>单次许愿成功需要：16,777,216次计算</div>
       <div>全局算力：27,962,027 Hash/s</div>
     </el-card>
@@ -90,9 +90,29 @@
   </div>
 </template>
 <script>
+import {apiSuperWishes} from '@/request/api'
 export default {
-  name: "Post"
-};
+  name: 'Post',
+  data(){
+    return {
+      dataPost:{},
+      tipMessage:''
+    }
+  },
+  created(){
+    this.onload()
+  },
+  methods:{
+    onload(){
+      apiSuperWishes().then(res=>{
+        console.log(res,'post')
+        this.dataPost = res
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+  }
+}
 </script>
 <style>
 .text {

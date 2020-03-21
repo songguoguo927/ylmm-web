@@ -68,12 +68,12 @@ import {
   // TimelineItem,
   // Link,
   // Divider,
-  // Image,
+  Image,
   // Calendar,
   // Backtop,
   // PageHeader,
   // CascaderPanel,
-  // Loading,
+  Loading,
   // MessageBox,
   // Message,
   // Notification
@@ -147,15 +147,15 @@ Vue.use(Card);
 // Vue.use(TimelineItem);
 // Vue.use(Link);
 // Vue.use(Divider);
-// Vue.use(Image);
+Vue.use(Image);
 // Vue.use(Calendar);
 // Vue.use(Backtop);
 // Vue.use(PageHeader);
 // Vue.use(CascaderPanel);
 
-// Vue.use(Loading.directive);
+Vue.use(Loading.directive);
 
-// Vue.prototype.$loading = Loading.service;
+Vue.prototype.$loading = Loading.service;
 // Vue.prototype.$msgbox = MessageBox;
 // Vue.prototype.$alert = MessageBox.alert;
 // Vue.prototype.$confirm = MessageBox.confirm;

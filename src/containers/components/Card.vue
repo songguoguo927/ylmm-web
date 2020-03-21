@@ -2,17 +2,25 @@
  <div style="height:265px;">
   <div style="height:178px">
     <img
-    src="@/assets/timg4.jpg"
+    v-if="this.showItem.avatar"
+    :src="this.showItem.avatar"
     class="image"
-    @click="handleClickCoverToDetail"
-  >
+    @click="()=>{handleClickCoverToDetail(this.showItem.code)}"
+    >
+    <el-image v-else fit="cover">
+      <div slot="error" class="image-slot">
+        <i class="el-icon-picture-outline"></i>
+      </div>
+    </el-image>
   </div>
+    
+  <!-- src="@/assets/timg4.jpg"-->
   <div class="detail">
-    <p style="margin-bottom:15px">易烊千玺</p>
+    <p style="margin-bottom:15px">{{this.showItem.name}}</p>
     <div style="display:flex;justify-content: space-between;">
-      <div><span style="margin-right:10px">62617.00</span>
-      <span style="color:#f56c6c">+31208.50%</span></div>
-      <span style="color:rgba(102,52,153,0.8);cursor:pointer" @click="handleClickCoverToDetail">查看详情</span>
+      <div><span style="margin-right:10px">{{this.showItem.price}}</span>
+      <span style="color:#f56c6c">TODO-price_change</span></div>
+      <button class="removeBtnDefault" @click="()=>{handleClickCoverToDetail(this.showItem.code)}">查看详情</button>
     </div>
   </div>
   </div>
@@ -25,16 +33,12 @@ export default {
      
     };
   },
+  props:['showItem'],
   methods: {
-    handleClickCoverToDetail(){
-      console.log('查看对应艺人的详情，需要有个id标识')
+    handleClickCoverToDetail(code){
+      console.log('查看对应艺人的详情，需要有个id标识',code)
       // 跳转至详情页面
-      this.$router.push({
-        name:'Detail',
-        query:{
-          id:123
-        }
-      })
+      this.$router.push('/detail/'+code)
     }
   }
 }
@@ -58,5 +62,8 @@ export default {
   }
   p,span{
     cursor: default;
+  }
+  .removeBtnDefault{
+    border:none;background:transparent;color:rgba(102,52,153,0.8);cursor:pointer;
   }
 </style>

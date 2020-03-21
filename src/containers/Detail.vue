@@ -1,7 +1,7 @@
 <template>
   <div style="margin:30px">
     Detail
-    {{$route.query.id}}
+    {{$route.params.code}}
     <el-row :gutter="20">
       <el-col :md="18" :xs="24">
         <el-card class="box-card">

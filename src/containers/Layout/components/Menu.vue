@@ -7,13 +7,13 @@
       @select="handleSelect"
       router
     >
-      <el-menu-item index="/">援力满满（Beta）</el-menu-item>
-      <el-menu-item index="/rank">援力排行</el-menu-item>
-      <el-menu-item index="/help">帮助与玩法</el-menu-item>
-      <el-menu-item index="/post">运营公告</el-menu-item>
+      <el-menu-item index="/"><span class="iconfont icon-shouye"></span>援力满满（Beta）</el-menu-item>
+      <el-menu-item index="/rank"><span class="iconfont icon-rank"></span>援力排行</el-menu-item>
+      <el-menu-item index="/help"><span class="iconfont icon-help"></span>帮助与玩法</el-menu-item>
+      <el-menu-item index="/post"><span class="iconfont icon-postitpencil"></span>运营公告</el-menu-item>
       <el-submenu index="2">
         <!-- 已登录 -->
-        <template slot="title">用户名称</template>
+        <template slot="title"><span class="iconfont icon-user"></span>用户名称</template>
         <el-menu-item index="/profile">资产列表</el-menu-item>
         <el-menu-item index="/orders">挂单列表</el-menu-item>
         <el-menu-item index="/deals">交易列表</el-menu-item>
@@ -21,7 +21,7 @@
       </el-submenu>
       <el-submenu index="6">
         <!-- 未登录 -->
-        <template slot="title">用户中心</template>
+        <template slot="title"><span class="iconfont icon-user"></span>用户中心</template>
         <el-menu-item index="login">登录</el-menu-item>
         <el-menu-item index="signup">注册</el-menu-item>
       </el-submenu>
@@ -47,5 +47,9 @@ export default {
 <style lang="scss" scoped>
 ul.el-menu-demo{
   // padding-left:30px;
+}
+.iconfont{
+  margin-right: 10px;
+  vertical-align: baseline
 }
 </style>

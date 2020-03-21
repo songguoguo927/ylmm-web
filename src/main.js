@@ -7,7 +7,7 @@ import App from './App.vue';
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import './index.css'
-
+import '@/assets/css/iconfont.css'
 import 'element-ui/lib/theme-chalk/index.css';
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'

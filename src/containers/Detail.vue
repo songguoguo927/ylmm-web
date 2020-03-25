@@ -8,10 +8,21 @@
             <span style="margin-left: 6px;font-size: 12px;color: #c0c4cc;">{{stockInfo.code}}</span>
             <div style="float:right">
               <el-tooltip class="item" effect="dark" content="为 Ta 加油，就有机会抽取一定数量的萌股哟" placement="top">
-                <el-button round size="small"><i class="el-icon-star-on"></i>许愿</el-button>
+                <el-button round size="small" @click="dialogForm2Visible = true"><i class="el-icon-star-on"></i>许愿</el-button>
               </el-tooltip>
               
             </div>
+            <el-dialog :title="wishTitle" :visible.sync="dialogForm2Visible" center  width="30%">
+              <el-form :model="form2">
+                <el-form-item label="">
+                  <el-input v-model="form2.reason" autocomplete="off" placeholder="我永远喜欢艾拉"></el-input>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogForm2Visible = false">取 消</el-button>
+                <el-button type="primary" @click="handlemm2">确 定</el-button>
+              </div>
+            </el-dialog>
           </div>
           <div style="margin-top:30px;display:inline-block">
             <Dynamic
@@ -142,7 +153,9 @@
             <span>角色作品</span>
           </div>
           <!-- 音乐or作品说明 -->
-          <div>作品说明</div>
+          <div>
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 :src="stockInfo['music_link']"></iframe>
+          </div>
         </el-card>
 
         <el-card class="box-card">
@@ -160,7 +173,9 @@
           <div slot="header" class="clearfix">
             <span>应援动态</span>
           </div>
-          <div>应援动态</div>
+          <divv v-for="(item,index) in yingyuandongtaiInfo" :key="index">
+            {{item.user.name}}抽到了<span v-if="item.amount">{{item.amount}}股</span><span v-else>援力</span> <span>（几秒内）</span>
+          </divv>
         </el-card>
 
         <el-card class="box-card">
@@ -183,6 +198,8 @@
 // import todate from '@/util/format.js'
 import LineChart from "./LineChart.js";
 import Dynamic from "./components/Dynamic.vue";
+import Z from '@/util/localStorage.js'
+
 import {
   apiStocks,
   apiStocksHoldingRank,
@@ -191,10 +208,12 @@ import {
   apiStocksMy,
   apiStocksSelect,
   apiStocksDeSelect,
-  apiMyOrdersdeal,
+  // apiMyOrdersdeal,
   apiMyOrdersPost,
   apiMyOrders,
-  apiMyOrdersCancel
+  apiMyOrdersCancel,
+  apiWishs,
+  apiWishsget
 } from "@/request/api";
 export default {
   name: "Detail",
@@ -204,6 +223,7 @@ export default {
   },
   data() {
     return {
+      wishTitle:'许愿',
       value: false,
       chartData1: {
         //按小时的数据
@@ -232,6 +252,7 @@ export default {
         maintainAspectRatio: false
       },
       dialogFormVisible: false,
+      dialogForm2Visible:false,
       dialogVisible: false,
       radio1: "上海",
       form: {
@@ -239,6 +260,9 @@ export default {
         price: "",
         amount: "",
         reason: ""
+      },
+      form2:{//许愿表单喊话
+        reason:''
       },
       num: 100,
       price: 1,
@@ -252,7 +276,8 @@ export default {
       chengjiaoInfo: "",
       myInfo: "",
       mydealInfo: "",
-      code:''
+      code:'',
+      yingyuandongtaiInfo:''
     };
   },
   mounted() {
@@ -262,9 +287,9 @@ export default {
     this.getStockInfo(this.code);
     this.getHoubuInfo(this.code);
     this.getSaleAndBuyInfo(this.code);
-    this.getSaleAndBuyInfo(this.code);
 
-    if (this.$store.state.isLogin) {
+    if (Z.getStorage("token")||this.$store.state.isLogin) {
+      console.log('--------登录就发起下面的请求')
       this.getStockInfoWithMe(this.code);
       this.getMydeals(this.code)
     }
@@ -318,7 +343,7 @@ export default {
     getMydeals(code) {
       apiMyOrders({ code, status: "padding" })
         .then(res => {
-          console.log(res,'deal------------------');
+          console.log(res,'与我相关-我的交易------------------');
           this.mydealInfo = res.data;
         })
         .catch(err => {
@@ -329,7 +354,7 @@ export default {
     getStockInfoWithMe(code) {
       apiStocksMy(code)
         .then(res => {
-          console.log(res);
+          console.log(res,'与我相关的信息-----iiiii');
           this.myInfo = res;
           this.value = res.selected;
         })
@@ -340,7 +365,7 @@ export default {
     getStockInfo(code) {
       apiStocks(code)
         .then(res => {
-          console.log(res);
+          console.log(res,'StockInfo------------');
           this.stockInfo = res;
         })
         .catch(err => {
@@ -348,10 +373,10 @@ export default {
         });
     },
     //获取成交记录
-    getchengjiaoInfo() {
+    getchengjiaoInfo(code) {
       apiMyDeals({ code })
         .then(res => {
-          console.log(res);
+          console.log(res,'成交记录------------');
           this.chengjiaoInfo = res.data;
         })
         .catch(err => {
@@ -366,7 +391,7 @@ export default {
         status: "padding"
       })
         .then(res => {
-          console.log(res);
+          console.log(res,'交易动态salesale');
           this.saleInfo = res.data;
         })
         .catch(err => {
@@ -378,7 +403,7 @@ export default {
         status: "padding"
       })
         .then(res => {
-          console.log(res);
+          console.log(res,'交易动态buybuy');
           this.buyInfo = res.data;
         })
         .catch(err => {
@@ -389,12 +414,72 @@ export default {
     getHoubuInfo(code) {
       apiStocksHoldingRank(code)
         .then(res => {
-          console.log(res);
+          console.log(res,'候补排位');
           this.houbuInfo = res.data;
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    //获取应援动态 res
+    //{"count":1,"data":[
+      // {"id":25753487,
+      // "user":{"id":1496,"name":"jiam927","nick_name":"jiam927","balance":1359294,"address":"aIX8ePap9CVsZ2Gm9d3uR35K3bDdCt8IEs","wish_count":2,"wish_limit":100},
+      //"amount":78,
+      //"detail":{"cheer_word":"我我我","love_power":77744178430},"created_at":"Wed, 25 Mar 2020 20:34:08 +0800"}]}
+    getLoverPower(code){
+      apiWishsget({code}).then(res=>{
+          console.log(res,'应援动态')
+          this.yingyuandongtaiInfo = res.data
+        }).catch(err => {
+          console.log(err);
+        });
+    },
+    handlemm2(){//处理提交许愿喊话
+      // this.dialogForm2Visible = false;
+      console.log(this.form2);
+      apiWishs({
+        code:this.code,
+        lover_power:88230032862,//搞清楚这个从哪里来TODO
+        cheer_word:this.form2.reason
+      }).then(res=>{
+        if(res.success){
+          console.log(res)
+        // {"success":true,"hard":13,"type":"coin","amount":204464}
+        this.wishTitle = '获得了'+res.amount/100+'点援力'
+        // this.getStockInfoWithMe(this.code)
+        apiStocksMy(this.code) //抽到援例/股 去更新与我相关
+        .then(res => {
+          this.myInfo = res;
+          this.value = res.selected;
+          let y = res['wish_count']
+          let rest = res['wish_limit']-y
+          this.$message({
+            message:'已经许愿'+y+'次，还剩'+rest+'次',
+            type:'success'
+          })        //{"balance":1359294,"stock_balance":0,"wish_count":1,"wish_limit":100,"selected":true}
+
+        })
+        .catch(err => {
+          console.log(err);
+        });
+        // apiMyOrdersdeal({code:this.code,status:'padding'}).then(res=>{//去更新我的交易
+        //   console.log(res)
+        // }).catch(err => {
+        //   console.log(err);
+        // });
+        this.getMydeals(this.code)//去更新我的交易
+        this.getLoverPower(this.code)//去更新应援动态
+        }else{
+          this.$message({
+            message:res.msg,
+            type:'error'
+          })
+        }
+        }).catch(err=>{
+        console.log(err)
+      })
+      
     },
     handlemm() {
       //处理买卖股份

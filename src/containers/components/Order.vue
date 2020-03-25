@@ -5,10 +5,11 @@
       <!--  width="180" -->
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-tag size="medium">{{ scope.row.status }}</el-tag>
+          <el-tag size="medium" v-if="scope.row.status=='进行中'">{{ scope.row.status }}</el-tag>
+          <el-tag type="danger" v-else>{{ scope.row.status }}</el-tag>
         </template>
       </el-table-column>
-      <!--  padding->进行中,cancel取消 -TODO颜色区分 -->
+      <!--  padding->进行中,cancel取消 -->
       <el-table-column prop="stock" label="对象">
         <template slot-scope="scope">
           <el-link type="primary" @click="()=>{handleClickCoverToDetail(scope.row.code)}">

@@ -12,9 +12,12 @@ export const apiSuperWishes = p => get('/api/super_wishs', p); //Post
 export const apiProfile = p => get('/api/profile', p); //Profile
 export const apiMyOrders = p => get('/api/orders/my', p); //Order 
 export const apiMyOrdersPost = p => post('/api/orders', p); //Order 
-export const apiMyOrdersdeal = p => get('/api/orders/my', p); //Order 
+// export const apiMyOrdersdeal = p => get('/api/orders/my', p); //Order 
 export const apiMyOrdersCancel = p => post('/api/orders/'+p+'/cancel'); //Order  p订单号
 export const apiMyDeals = p => get('/api/deals', p); //Deals
+export const apiWishs = p => post('/api/wishs', p); 
+export const apiWishsget = p => get('/api/wishs', p); 
+
 
 // export const apiGeetest = p => get('/api/geetest', p);//00--已经干掉惹
 // 注册1返回数据{

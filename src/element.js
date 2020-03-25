@@ -2,6 +2,7 @@ import Vue from 'vue';
 import {
   Pagination,
   Dialog,
+  Avatar,
   Autocomplete,
   Dropdown,
   DropdownMenu,
@@ -30,7 +31,7 @@ import {
   // TimeSelect,
   // TimePicker,
   // Popover,
-  // Tooltip,
+  Tooltip,
   // Breadcrumb,
   // BreadcrumbItem,
   Form,
@@ -66,7 +67,7 @@ import {
   // Footer,
   // Timeline,
   // TimelineItem,
-  // Link,
+  Link,
   // Divider,
   Image,
   // Calendar,
@@ -75,10 +76,10 @@ import {
   // CascaderPanel,
   Loading,
   // MessageBox,
-  // Message,
+  Message,
   // Notification
 } from 'element-ui';
-
+Vue.use(Avatar)
 Vue.use(Pagination);
 Vue.use(Dialog);
 Vue.use(Autocomplete);
@@ -109,7 +110,7 @@ Vue.use(TableColumn);
 // Vue.use(TimeSelect);
 // Vue.use(TimePicker);
 // Vue.use(Popover);
-// Vue.use(Tooltip);
+Vue.use(Tooltip);
 // Vue.use(Breadcrumb);
 // Vue.use(BreadcrumbItem);
 Vue.use(Form);
@@ -145,7 +146,7 @@ Vue.use(Card);
 // Vue.use(Footer);
 // Vue.use(Timeline);
 // Vue.use(TimelineItem);
-// Vue.use(Link);
+Vue.use(Link);
 // Vue.use(Divider);
 Vue.use(Image);
 // Vue.use(Calendar);
@@ -161,4 +162,4 @@ Vue.prototype.$loading = Loading.service;
 // Vue.prototype.$confirm = MessageBox.confirm;
 // Vue.prototype.$prompt = MessageBox.prompt;
 // Vue.prototype.$notify = Notification;
-// Vue.prototype.$message = Message;
+Vue.prototype.$message = Message;

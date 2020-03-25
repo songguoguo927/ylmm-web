@@ -19,7 +19,8 @@
     <p style="margin-bottom:15px">{{this.showItem.name}}</p>
     <div style="display:flex;justify-content: space-between;">
       <div><span style="margin-right:10px">{{this.showItem.price}}</span>
-      <span style="color:#f56c6c">TODO-price_change</span></div>
+      <!-- TODO-price_change -->
+      <span style="color:#f56c6c">+31208.50%</span></div>
       <button class="removeBtnDefault" @click="()=>{handleClickCoverToDetail(this.showItem.code)}">查看详情</button>
     </div>
   </div>

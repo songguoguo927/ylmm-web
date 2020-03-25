@@ -127,6 +127,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.card-list{
+  min-height: calc(60vh)
+}
 .el-row {
   margin-bottom: 20px;
   &:last-child {

@@ -4,11 +4,11 @@
     <el-form
       :model="ruleForm"
       status-icon
-      :rules="rules"
       ref="ruleForm"
       label-width="100px"
       class="demo-ruleForm"
-    >
+    >     
+    <!-- :rules="rules" -->
       <el-form-item label="昵称" prop="name">
         <el-input type="text" v-model="ruleForm['name']" autocomplete="off"></el-input>
       </el-form-item>
@@ -25,13 +25,14 @@
         <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
       </el-form-item>
     </el-form>
+    <div>{{tip}}</div>
     <div id="sc" style="margin-left:80px;margin-top:0;"></div>
   </div>
   </div>
 </template>
 <script>
-import { createUser } from "@/request/api";
-
+import { apiGeetest,createUser } from "@/request/api";
+import Z from '@/util/localStorage.js'
 export default {
   data() {
     var checkAge = (rule, value, callback) => {
@@ -71,43 +72,62 @@ export default {
     };
     return {
       ruleForm: {
-        name: "xsy",
-        nick_name: "xsy",
-        password:"xsy",
-        password_confirmation: "xsy"
+        name: "",
+        nick_name: "",
+        password:"",
+        password_confirmation: ""
       },
-      rules: {
-        // pass: [{ validator: validatePass, trigger: "blur" }],
-        // checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        // age: [{ validator: checkAge, trigger: "blur" }]
-        name: [],
-        nick_name: [],
-        password:[],
-        password_confirmation:[]
-      }
+      tip:'未注册'
+      // rules: {
+      //   // pass: [{ validator: validatePass, trigger: "blur" }],
+      //   // checkPass: [{ validator: validatePass2, trigger: "blur" }],
+      //   // age: [{ validator: checkAge, trigger: "blur" }]
+      //   name: [],
+      //   nick_name: [],
+      //   password:[],
+      //   password_confirmation:[]
+      // }
     };
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+      // this.$refs[formName].validate(valid => {
+      //   if (valid) {
+        this.newUser()
+        // } else {
+        //   console.log("error submit!!");
+        //   return false;
+        // }
+      // });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    newUser(){
+      createUser(this.ruleForm).then(res=>{
+        console.log('user',res)  
+        this.tip = '注册成功'+JSON.stringify(res)    
+        if(res.msg){
+          this.$message({
+          message:res.msg,
+          type:'success'
+          })
+        }else if(res.token){
+          Z.setStorage('token',res.token)
+        //注册成功返回res { id: 3, token: "a8ZTTSl1tgpKttxgNBMag6lagTF2URAV" }--将token存入本地
+        }
+      }).catch(error=>{
+        console.log(error,'注册失败')
+        this.tip = '注册失败'
+      })
     }
   },
   mounted(){
-    createUser(this.ruleForm).then(res=>{
-        console.log('user',res)
-      }).catch(error=>{
-        console.log(error)
-      })
+    // apiGeetest().then(res=>{//TODO 此请求500
+    //     console.log('geetest',res)
+    //   }).catch(error=>{
+    //     console.log(error)
+    //   })  
+    }
   }
-};
 </script>

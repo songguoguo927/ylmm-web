@@ -1,109 +1,153 @@
 <template>
-<div style="margin:50px">
-  <el-table :data="showTableData" border style="width: 100%">
-    <el-table-column prop="orderId" label="订单号"></el-table-column> <!--  width="180" -->
-    <el-table-column prop="status" label="状态"></el-table-column>
-    <el-table-column prop="who" label="对象"></el-table-column>
-    <el-table-column prop="price" label="价格"></el-table-column>
-    <el-table-column prop="nums" label="数量"></el-table-column>
-    <el-table-column prop="finishedNums" label="完成数量"></el-table-column>
-    <el-table-column prop="orderTime" label="下单时间"></el-table-column>
-    <el-table-column prop="operation" label="操作"></el-table-column>
-  </el-table>
-  <div class="block">
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="pageSizes"
-      :page-size="defaultPS"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total">
-    </el-pagination>
-  </div>
+  <div style="margin:50px">
+    <el-table :data="showTableData" border style="width: 100%">
+      <el-table-column prop="id" label="订单号"></el-table-column>
+      <!--  width="180" -->
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <el-tag size="medium">{{ scope.row.status }}</el-tag>
+        </template>
+      </el-table-column>
+      <!--  padding->进行中,cancel取消 -TODO颜色区分 -->
+      <el-table-column prop="stock" label="对象">
+        <template slot-scope="scope">
+          <el-link type="primary">
+            <router-link :to="'/detail/'+scope.row.code">{{scope.row.stock}}</router-link>
+          </el-link>
+        </template>
+      </el-table-column>
+      <!--点击对象名跳到对应detail页 -->
+      <el-table-column prop="price" label="价格/援力"></el-table-column>
+      <!--  价格/100-->
+      <el-table-column prop="amount" label="数量/股"></el-table-column>
+      <el-table-column prop="finished_amount" label="完成数量"></el-table-column>
+      <el-table-column prop="created_at" label="下单时间" width="180"></el-table-column>
+      <!-- 搞成 2020-03-25 15:31:43-->
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            v-if="scope.row.status=='进行中'"
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)"
+          >撤单</el-button>
+        </template>
+      </el-table-column>
+      <!--  撤单按钮-->
+    </el-table>
+    <div class="block">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="pageSizes"
+        :page-size="defaultPS"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 <script>
-import {apiMyOrders} from '@/request/api'
+import { apiMyOrders, apiMyOrdersCancel } from "@/request/api";
 export default {
   data() {
     return {
-      alltableData:[
-        {
-          orderId:'1',
-          status:'已售',
-          who:'222',
-          price:233,
-          nums:100,
-          finishedNums:50,
-          orderTime:'2019.10.27',
-          operation:'000'
-        },
-        { orderId:'2',},
-        { orderId:'3',},
-        { orderId:'4',},
-        { orderId:'5',},
-        { orderId:'6',},
-      ],
-      pageSizes:[1, 2, 3, 4],//可设置每页展示多少条数据 ，默认1条
-      defaultPS:1,//每页显示多少条
-      currentPage: 1,//当前页数
-    }
+      alltableData: [],
+      pageSizes: [5, 10, 30, 50], //可设置每页展示多少条数据 ，默认5条
+      defaultPS: 5, //每页显示多少条
+      currentPage: 1 //当前页数
+    };
   },
-  computed:{
-    showTableData:{
-      get: function () {
-        if(this.currentPage==1){
-          return this.alltableData.slice(0,this.defaultPS)
-        }
-        else{
-          let r = this.alltableData.slice((this.currentPage-1)*this.defaultPS,this.defaultPS*this.currentPage)
+  computed: {
+    showTableData: {
+      get: function() {
+        if (this.currentPage == 1) {
+          return this.alltableData.slice(0, this.defaultPS);
+        } else {
+          let r = this.alltableData.slice(
+            (this.currentPage - 1) * this.defaultPS,
+            this.defaultPS * this.currentPage
+          );
           // console.log(r)
-          return r
+          return r;
         }
       },
-      set:function(v){
-        console.log(v,'---')
-        return v
+      set: function(v) {
+        console.log(v, "---");
+        return v;
       }
     },
-    total:{
-      get(){
-        return this.alltableData.length
+    total: {
+      get() {
+        return this.alltableData.length;
       }
     }
   },
   methods: {
-    onload(p){
-      apiMyOrders(p).then(res=>{
-        console.log(res,'order')
-        this.alltableData.unshift(res.data)
-      }).catch(err=>{
-        console.log(err)
-      })
+    addZero(obj){
+      if(obj<10) return "0" +""+ obj;
+        else return obj;
+    },
+    todate(inputstr) {
+      //Wed, 25 Mar 2020 15:56:03 +0800  2020-03-25 15:31:43
+       var d = new Date(inputstr) 
+        let youWant=d.getFullYear() + '-' + this.addZero(d.getMonth() + 1) + '-' + this.addZero(d.getDate()) + ' ' + this.addZero(d.getHours())
+         + ':' + this.addZero(d.getMinutes()) + ':' + this.addZero(d.getSeconds()); 
+        return youWant;
+    },
+    handleDelete(index, row) {
+      console.log(index, row);
+      apiMyOrdersCancel(row.id)
+        .then(res => {
+          console.log(res, "cancel");
+          this.onload({
+            code: "",
+            status: "",
+            page: 1
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    onload(p) {
+      apiMyOrders(p)
+        .then(res => {
+          console.log(res, "order");
+          res.data.forEach(item=>{
+           item.status = item.status=='padding' ? '进行中' : '取消'
+           item.price = item.price/100
+           item['created_at'] = this.todate(item['created_at'])
+          })
+          this.alltableData = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
-      this.defaultPS = val
+      this.defaultPS = val;
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      console.log(`当前页: ${val}`);
       this.currentPage = val;
       // this.showTableData =  this.alltableData.slice((this.currentPage-1)*this.defaultPS,this.defaultPS*this.currentPage)
     }
   },
-  created(){
+  mounted() {
     this.onload({
-      code:'ISLA',
-      status:'',
-      page:1
-    })
+      code: "",
+      status: "",
+      page: 1
+    });
   }
-}
+};
 </script>
 <style lang="css" scoped>
-.block{
-  margin-top:20px;
+.block {
+  margin-top: 20px;
 }
 </style>
 

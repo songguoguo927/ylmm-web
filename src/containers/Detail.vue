@@ -1,23 +1,34 @@
 <template>
   <div style="margin:30px">
-    Detail
-    {{$route.params.code}}
     <el-row :gutter="20">
       <el-col :md="18" :xs="24">
         <el-card class="box-card">
           <div>
-            <span>艾拉ISLA</span>
-            <span>
-              <el-button round>许愿</el-button>
-            </span>
+            <span>{{stockInfo.name}}</span>
+            <span style="margin-left: 6px;font-size: 12px;color: #c0c4cc;">{{stockInfo.code}}</span>
+            <div style="float:right">
+              <el-tooltip class="item" effect="dark" content="为 Ta 加油，就有机会抽取一定数量的萌股哟" placement="top">
+                <el-button round size="small"><i class="el-icon-star-on"></i>许愿</el-button>
+              </el-tooltip>
+              
+            </div>
           </div>
-          <!-- TODO数字显示做成动态的 -->
-          <div>
-            62617.00
-            <span>+31208.50%</span>
+          <div style="margin-top:30px;display:inline-block">
+            <Dynamic
+              v-if="stockInfo.price"
+              :startVal="0"
+              :endVal="(stockInfo.price/100)"
+              :speed="8000"
+              :decimals="2"
+              :isReverse="false"
+            />
+            <span v-else style="font-size:40px">0</span>
+            <span style="margin-left:10px;font-size:18px;color:#f56c6c">+31208.50%</span>
           </div>
-          <div>总市值: 107,413,577,502</div>
-          <div>总股份: 1,715,406</div>
+          <div style="margin-top:30px;float:right">
+            <p>总市值: {{stockInfo.price*stockInfo['total_share']/100}}</p>
+            <p>总股份: {{stockInfo['total_share']}}</p>
+          </div>
         </el-card>
         <!-- 行情走势 -->
         <el-card class="box-card">
@@ -35,61 +46,94 @@
           </div>
         </el-card>
         <!-- 与我相关 -->
-        <el-card class="box-card">
+        <el-card class="box-card" v-if="$store.state.isLogin">
           <div slot="header" class="clearfix">
             <span>与我相关</span>
+            <div style="float:right">
+              <el-switch
+                v-model="value"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                @change="handleSwitch"
+              ></el-switch>
+              <span v-if="value">取消</span>
+              <span v-else>特别</span>
+              <span>关注</span>
+            </div>
           </div>
-          <div>我持有 many1 股和 many2 援力</div>
-          <el-switch v-model="value" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
-          <span v-if="value">取消</span>
-          <span v-else>特别</span>
-          <span>关注</span>
+          <div>我持有 {{myInfo['stock_balance']}} 股和 {{myInfo.balance/100}} 援力</div>          
+            <div v-if="mydealInfo">
+              <h4 style="margin-top:20px;margin-bottom:20px">我的交易</h4>
+              <div v-for="(item,index) in mydealInfo" :key='index'  style="margin-top:20px">以 {{item.price/100}} 援力的价格
+                <span v-if="item.amount>0" style="color:red">买入</span><span v-else style="color:green">卖出</span> 
+                （{{item['finished_amount']}}/{{Math.abs(item.amount)}}） 股
+                <el-button               
+                    size="mini"
+                    type="danger"
+                    @click="handleDelete(item.id)"
+                    style="float:right"
+                  >取消</el-button></div>
+            </div>
+            
         </el-card>
         <!-- 交易动态 -->
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>交易动态</span>
-            <el-button round @click="dialogFormVisible = true">买卖股份</el-button>
+            <div style="float:right">
+              <el-tooltip class="item" effect="dark" content="设定你想买入和卖出的价格，系统会为你寻找合适的交易对象" placement="top">
+                <el-button round @click="dialogFormVisible = true" size="small" type="primary"><i class="el-icon-goods"></i>买卖股份</el-button>
+              </el-tooltip>
+              
+            </div>
+
             <el-dialog title="挂单交易" :visible.sync="dialogFormVisible" center>
               <el-form :model="form">
                 <el-form-item label="方向" :label-width="formLabelWidth">
-                  <el-radio-group v-model="radio1" @change="fxchange">
+                  <!-- @change="fxchange" -->
+                  <el-radio-group v-model="form.radio">
                     <el-radio-button label="买入"></el-radio-button>
                     <el-radio-button label="卖出"></el-radio-button>
                   </el-radio-group>
                 </el-form-item>
                 <!-- tip最少交易100股 -->
                 <el-form-item label="数量" :label-width="formLabelWidth">
-                  <el-input-number v-model="num" @change="handleChange" :min="100" label="描述文字"></el-input-number>
+                  <el-input-number v-model="form.amount" :min="100"></el-input-number>
                 </el-form-item>
                 <!-- 最低价格为1援力 -->
                 <el-form-item label="价格" :label-width="formLabelWidth">
-                  <el-input-number v-model="price" @change="handleChange" :min="1" label="描述文字"></el-input-number>
+                  <el-input-number v-model="form.price" :min="1"></el-input-number>
                 </el-form-item>
                 <el-form-item label="原因" :label-width="formLabelWidth">
-                  <el-input v-model="form.name" autocomplete="off" placeholder="我永远喜欢艾拉"></el-input>
+                  <el-input v-model="form.reason" autocomplete="off" placeholder="我永远喜欢艾拉"></el-input>
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="handlemm">确 定</el-button>
               </div>
             </el-dialog>
           </div>
-          <div style="color:red">买方</div>
-          <div>--------</div>
-          <div style="color:green">卖方</div>
-          <div>--------</div>
+          <div style="color:red;margin-bottom:20px">买方</div>
+          <div v-for="(item,index) in buyInfo" :key="index">
+            <span>{{item.user.name}} 想以{{item.price/100}}援力每股的单价，买入 {{item.amount}}（{{item['finished_amount']}}） 股</span>
+            <span style="color:gray;float:right">{{todate(item['created_at'])}}</span>
+          </div>
+          <div style="color:green;margin-bottom:20px;margin-top:20px">卖方</div>
+          <div v-for="(item,index) in saleInfo" :key="index">
+            <span>{{item.user.name}} 想以{{item.price/100}}援力每股的单价，卖出 {{Math.abs(item.amount)}}（{{item['finished_amount']}}） 股</span>
+            <span style="color:gray;float:right">{{todate(item['created_at'])}}</span>
+          </div>
         </el-card>
         <!-- 成交记录 -->
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>成交记录</span>
           </div>
-          <div>以 many 股 成交 100 股</div>
-          <div>以 many 股 成交 100 股</div>
-          <div>以 many 股 成交 100 股</div>
-          <div>以 many 股 成交 100 股</div>
+          <div v-for="(item,index) in chengjiaoInfo" :key="index">
+            <span>以 {{item.price/100}} 股 成交 {{item.amount}} 股</span>
+            <span style="color:gray;float:right">{{todate(item['created_at'])}}</span>
+          </div>
         </el-card>
       </el-col>
       <el-col :md="6" :xs="24">
@@ -97,7 +141,6 @@
           <div slot="header" class="clearfix">
             <span>角色作品</span>
           </div>
-          <!-- TODO数字显示做成动态的 -->
           <!-- 音乐or作品说明 -->
           <div>作品说明</div>
         </el-card>
@@ -106,7 +149,11 @@
           <div slot="header" class="clearfix">
             <span>标签</span>
           </div>
-          <el-tag>标签一</el-tag>
+          <el-tag
+            v-for="(item,index) in stockInfo.tags"
+            :key="index"
+            style="margin-right:10px;margin-bottom:10px"
+          >{{item}}</el-tag>
         </el-card>
 
         <el-card class="box-card">
@@ -120,27 +167,40 @@
           <div slot="header" class="clearfix">
             <span>现任老婆</span>
           </div>
-          <div>who 持有 many 股</div>
+          <div v-if="houbuInfo[0]">{{houbuInfo[0].user}} 持有 {{houbuInfo[0].balance}} 股</div>
         </el-card>
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>候补排位</span>
           </div>
-          <div>who 持有 many 股</div>
-          <div>who 持有 many 股</div>
-          <div>who 持有 many 股</div>
-          <div>who 持有 many 股</div>
+          <div v-for="(item,index) in houbuInfo" :key="index">{{item.user}} 持有 {{item.balance}} 股</div>
         </el-card>
       </el-col>
     </el-row>
   </div>
 </template>
 <script>
+// import todate from '@/util/format.js'
 import LineChart from "./LineChart.js";
+import Dynamic from "./components/Dynamic.vue";
+import {
+  apiStocks,
+  apiStocksHoldingRank,
+  apiDealsStatus,
+  apiMyDeals,
+  apiStocksMy,
+  apiStocksSelect,
+  apiStocksDeSelect,
+  apiMyOrdersdeal,
+  apiMyOrdersPost,
+  apiMyOrders,
+  apiMyOrdersCancel
+} from "@/request/api";
 export default {
   name: "Detail",
   components: {
-    LineChart
+    LineChart,
+    Dynamic
   },
   data() {
     return {
@@ -175,22 +235,43 @@ export default {
       dialogVisible: false,
       radio1: "上海",
       form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: ""
+        radio: "",
+        price: "",
+        amount: "",
+        reason: ""
       },
       num: 100,
       price: 1,
       chartType: "按小时",
       formLabelWidth: "120px",
-      height: 300
+      height: 300,
+      stockInfo: "",
+      houbuInfo: "",
+      saleInfo: "",
+      buyInfo: "",
+      chengjiaoInfo: "",
+      myInfo: "",
+      mydealInfo: "",
+      code:''
     };
   },
   mounted() {
     // this.fillData();
+    this.code = this.$route.params.code;
+    this.getStockInfo(this.code);
+    this.getHoubuInfo(this.code);
+    this.getSaleAndBuyInfo(this.code);
+    this.getSaleAndBuyInfo(this.code);
+
+    if (this.$store.state.isLogin) {
+      this.getStockInfoWithMe(this.code);
+      this.getMydeals(this.code)
+    }
   },
   computed: {
+    // code(){
+    //   return this.$route.params.code
+    // },
     myStyles() {
       return {
         height: `${this.height}px`,
@@ -209,6 +290,167 @@ export default {
     }
   },
   methods: {
+    addZero(obj){
+      if(obj<10) return "0" +""+ obj;
+        else return obj;
+    },
+    todate(inputstr) {
+      //Wed, 25 Mar 2020 15:56:03 +0800  2020-03-25 15:31:43
+       var d = new Date(inputstr) 
+        let youWant=d.getFullYear() + '-' + this.addZero(d.getMonth() + 1) + '-' + this.addZero(d.getDate()) + ' ' + this.addZero(d.getHours())
+         + ':' + this.addZero(d.getMinutes()) + ':' + this.addZero(d.getSeconds()); 
+        return youWant;
+    },
+    handleDelete(id) {
+      apiMyOrdersCancel(id)
+        .then(res => {
+          console.log(res, "cancel");
+          this.getMydeals(this.code)
+          this.getSaleAndBuyInfo(this.code)
+          this.getStockInfoWithMe(this.code)
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    //获取与我相关-我的交易
+    getMydeals(code) {
+      apiMyOrders({ code, status: "padding" })
+        .then(res => {
+          console.log(res,'deal------------------');
+          this.mydealInfo = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    //与我相关的信息
+    getStockInfoWithMe(code) {
+      apiStocksMy(code)
+        .then(res => {
+          console.log(res);
+          this.myInfo = res;
+          this.value = res.selected;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    getStockInfo(code) {
+      apiStocks(code)
+        .then(res => {
+          console.log(res);
+          this.stockInfo = res;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    //获取成交记录
+    getchengjiaoInfo() {
+      apiMyDeals({ code })
+        .then(res => {
+          console.log(res);
+          this.chengjiaoInfo = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    //获取交易动态
+    getSaleAndBuyInfo(code) {
+      apiDealsStatus({
+        code,
+        type: "sale",
+        status: "padding"
+      })
+        .then(res => {
+          console.log(res);
+          this.saleInfo = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      apiDealsStatus({
+        code,
+        type: "buy",
+        status: "padding"
+      })
+        .then(res => {
+          console.log(res);
+          this.buyInfo = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    //获取候补排位
+    getHoubuInfo(code) {
+      apiStocksHoldingRank(code)
+        .then(res => {
+          console.log(res);
+          this.houbuInfo = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    handlemm() {
+      //处理买卖股份
+      this.dialogFormVisible = false;
+      console.log(this.form);
+      if (this.form.radio == "卖出") {
+        this.form.amount = -this.form.amount;
+      }
+      let formdata = {
+        code: this.$route.params.code,
+        price: this.form.price * 100,
+        amount: this.form.amount,
+        detail: {
+          reason: this.form.reason
+        }
+      };
+      console.log(formdata);
+      apiMyOrdersPost(formdata)
+        .then(res => {
+          console.log(res);
+          if (res.success) {
+            this.$message({
+              message: res.msg,
+              type:'success'
+            });
+            let code = this.$route.params.code;
+            this.getSaleAndBuyInfo(code);
+            this.getStockInfoWithMe(code);
+            this.getMydeals(code)
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    handleSwitch(v) {
+      console.log(v);
+      if (v) {
+        apiStocksSelect(this.$route.params.code)
+          .then(res => {
+            console.log(res);
+            this.value = true;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        apiStocksDeSelect(this.$route.params.code)
+          .then(res => {
+            console.log(res);
+            this.value = false;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    },
     chartTypechange(e) {
       if (e == "按天") {
         this.chartData = this.chartData2;

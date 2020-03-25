@@ -22,9 +22,9 @@ export default {
     Menu
   }, 
   watch:{
-    // $route:function(n,o){
-    //   console.log(n,o,'app')
-    // }
+    $route:function(n,o){
+      console.log(n,o,'app')
+    }
   }
 }
 </script>

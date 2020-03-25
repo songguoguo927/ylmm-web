@@ -4,28 +4,30 @@
       <el-form
         :model="ruleForm"
         status-icon
-        :rules="rules"
         ref="ruleForm"
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="昵称" prop="pass">
-          <el-input type="name" v-model="ruleForm.pass" autocomplete="off"></el-input>
+        <el-form-item label="昵称" prop="name">
+          <el-input type="name" v-model="ruleForm.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="checkPass">
-          <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
+      <div>{{userinfo}}--{{res}}</div>
       <div id="sc" style="margin-left:80px;margin-top:0;"></div>
     </div>
   </div>
 </template>
 <script>
 import { apiLogin,apiUser} from "@/request/api";
+import Z from '@/util/localStorage.js'
+
 export default {
   data() {
     var checkAge = (rule, value, callback) => {
@@ -64,49 +66,71 @@ export default {
       }
     };
     return {
-      ruleForm: {
-        pass: "",
-        checkPass: "",
-        age: ""
+     ruleForm: {
+        name: "",
+        password:"",
       },
-      rules: {
-        pass: [{ validator: validatePass, trigger: "blur" }],
-        checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        age: [{ validator: checkAge, trigger: "blur" }]
-      }
+      // rules: {
+      //   pass: [{ validator: validatePass, trigger: "blur" }],
+      //   checkPass: [{ validator: validatePass2, trigger: "blur" }],
+      // }
+      // userinfo:'未登录',
+      res:''
     };
+  },
+  computed:{
+    userinfo:{
+      get(){
+        return this.$store.state.isLogin ? '已登' : '未登'
+      },
+      set(v){
+        this.$store.commit('changeIsLogin',v)
+      }
+    }
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+      // this.$refs[formName].validate(valid => {
+      //   if (valid) {
+          // alert("submit!");
+          this.onLoad(this.ruleForm)
+      //   } else {
+      //     console.log("error submit!!");
+      //     return false;
+      //   }
+      // });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    onLoad(){
-      // apiLogin({
-      //   user:'jiam',
-      //   password:'jiam'
-      // }).then(res=>{
-      //   console.log('login',res)
-      // })
-      apiUser().then(res=>{
-        console.log('user',res)
+    onLoad(p){
+      apiLogin(p).then(res=>{
+        console.log('login',res)       
+        if(res.token){
+          Z.setStorage('token',res.token)
+          this.getMyselfInfo()
+        }else{
+            this.$message({
+            message:res.msg+'hahaha',
+            type:'error'
+          })
+        }
+      })     
+    },
+    getMyselfInfo(){
+      apiUser().then(res=>{//加了token就是自己的user信息
+        console.log(res)
+        this.userinfo = true
+        this.$store.commit('setAvatarName',res.name)
+        this.$store.commit('setwalletAddress',res.address)
+        this.res = JSON.stringify(res)
       }).catch(error=>{
         console.log(error)
       })
-      
     }
   },
   created(){
-    this.onLoad()
+    // this.onLoad()
   },
   mounted() {
     // window.onload = function() {

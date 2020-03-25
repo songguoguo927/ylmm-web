@@ -4,28 +4,35 @@
       <div slot="header" class="clearfix">
         <span>总览</span>
       </div>
-      <div>资产规模：{{parseInt(capital/100)}}援力</div>
-      <div>现金流：{{parseInt(coinBalance/100)}}援力</div>
+      <div class="x">资产规模：<Dynamic v-if="capital" :startVal='0' :endVal='parseInt(capital/100)' :speed='80' :decimals="0" :isReverse=false />援力</div>
+      <div class="x">现金流：<Dynamic v-if="coinBalance" :startVal='0' :endVal='parseInt(coinBalance/100)' :speed='80' :decimals="0" :isReverse=false />援力</div>
       <!-- TODO:where 钱包地址 from-->
-      <div>钱包地址: W4mWNPlFYz3xXQgZgGyhIQwzyxyoWvh0mP</div>
+      <div class="x">钱包地址: {{$store.state.walletAddress}}</div>
     </el-card>
 
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>明细</span>
       </div>
-      <div v-for="(item,index) in stocksList" :key="index">
-        <p>持有{{item.name}}{{item['shareholding_ratio']}}%</p>
-        <p>{{item.balance}}股净值{{item.balance*item.price/100}}援力</p>
-</div>
+      <div v-for="(item,index) in stocksList" :key="index"  class="x">
+        <p class="x">持有{{item.name}}{{item['shareholding_ratio']}}%</p>
+        <p>
+          <Dynamic :startVal='0' :endVal='item.balance' :speed='8' :decimals="0" :isReverse=false />股净值
+          <Dynamic :startVal='0' :endVal='(item.balance*item.price/100)' :speed='8' :decimals="0" :isReverse=false />援力
+        </p>
+      </div>
     </el-card>
 
   </div>
 </template>
 <script>
+import Dynamic from '@/containers/components/Dynamic.vue'
 import {apiProfile} from '@/request/api'
 export default {
   name: 'Profile',
+  components:{
+    Dynamic,
+  },
   data(){
     return {
       coinBalance:'',//现金流
@@ -52,6 +59,9 @@ export default {
 }
 </script>
 <style>
+.x{
+  margin-bottom: 10px;
+}
 .text {
   font-size: 14px;
 }

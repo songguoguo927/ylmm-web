@@ -17,6 +17,7 @@ export const apiMyOrdersCancel = p => post('/api/orders/'+p+'/cancel'); //Order 
 export const apiMyDeals = p => get('/api/deals', p); //Deals
 export const apiWishs = p => post('/api/wishs', p); 
 export const apiWishsget = p => get('/api/wishs', p); 
+export const apiTrendsget = p => get('/api/trends', p); 
 
 
 // export const apiGeetest = p => get('/api/geetest', p);//00--已经干掉惹

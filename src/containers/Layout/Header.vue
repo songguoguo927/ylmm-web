@@ -1,6 +1,8 @@
 <template>
   <div class="lunbo">
-    <div style="flex:1">LOGO</div>
+    <div style="flex:1">
+      <img src="@/assets/favicon.png" alt="" style="height: 80%;border-radius: 5px;margin-top:7px">
+    </div>
     <div class="lunbo-title">
       <p>恭喜你 发现一枚宝 愿你不枉此行</p>
     </div>

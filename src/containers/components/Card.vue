@@ -39,7 +39,18 @@ export default {
     handleClickCoverToDetail(code){
       console.log('查看对应艺人的详情，需要有个id标识',code)
       // 跳转至详情页面
-      this.$router.push('/detail/'+code)
+      // this.$router.push({
+      //   name:'Detail',
+      //   params:{
+      //     code,
+      //   }
+      // })
+      this.$router.push({
+        path:'/detail',
+        query:{
+          code,
+        }
+      })
     }
   }
 }

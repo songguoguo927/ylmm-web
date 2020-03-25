@@ -11,8 +11,9 @@
       <!--  padding->进行中,cancel取消 -TODO颜色区分 -->
       <el-table-column prop="stock" label="对象">
         <template slot-scope="scope">
-          <el-link type="primary">
-            <router-link :to="'/detail/'+scope.row.code">{{scope.row.stock}}</router-link>
+          <el-link type="primary" @click="()=>{handleClickCoverToDetail(scope.row.code)}">
+            <!-- <router-link :to="'/detail/'+scope.row.code">{{scope.row.stock}}</router-link> -->
+            {{scope.row.stock}}
           </el-link>
         </template>
       </el-table-column>
@@ -85,6 +86,22 @@ export default {
     }
   },
   methods: {
+     handleClickCoverToDetail(code){
+      console.log('查看对应艺人的详情，需要有个id标识',code)
+      // 跳转至详情页面
+      // this.$router.push({
+      //   name:'Detail',
+      //   params:{
+      //     code,
+      //   }
+      // })
+      this.$router.push({
+        path:'/detail',
+        query:{
+          code,
+        }
+      })
+    },
     addZero(obj){
       if(obj<10) return "0" +""+ obj;
         else return obj;

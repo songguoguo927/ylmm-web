@@ -44,7 +44,7 @@ export default new Router({
         // meta: { allowBack: false }
       },
       {
-        path: '/detail/:code',
+        path: '/detail',
         name: 'Detail',
         component: () => import('@/containers/Detail.vue')
       },

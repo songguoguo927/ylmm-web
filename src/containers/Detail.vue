@@ -257,7 +257,8 @@ export default {
   },
   mounted() {
     // this.fillData();
-    this.code = this.$route.params.code;
+    // this.code = this.$route.params.code;
+    this.code = this.$route.query.code;
     this.getStockInfo(this.code);
     this.getHoubuInfo(this.code);
     this.getSaleAndBuyInfo(this.code);
@@ -419,10 +420,10 @@ export default {
               message: res.msg,
               type:'success'
             });
-            let code = this.$route.params.code;
-            this.getSaleAndBuyInfo(code);
-            this.getStockInfoWithMe(code);
-            this.getMydeals(code)
+            
+            this.getSaleAndBuyInfo(this.code);
+            this.getStockInfoWithMe(this.code);
+            this.getMydeals(this.code)
           }
         })
         .catch(err => {

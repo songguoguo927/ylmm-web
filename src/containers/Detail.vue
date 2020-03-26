@@ -25,7 +25,7 @@
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogForm2Visible = false">取 消</el-button>
+                <!-- <el-button @click="dialogForm2Visible = false">取 消</el-button> -->
                 <el-button type="primary" @click="handlemm2">确 定</el-button>
               </div>
             </el-dialog>
@@ -50,7 +50,7 @@
         <!-- 行情走势 -->
         <TrendChart />
         <!-- 与我相关 -->
-        <AboutMe />
+        <AboutMe ref="aboutme"/>
         <!-- 交易动态 -->
         <jiaoyi />
         <!-- 成交记录 -->
@@ -61,9 +61,9 @@
           <div slot="header" class="clearfix">
             <span>角色作品</span>
           </div>
-          <!-- 音乐or作品说明 -->
+          <!-- 音乐or作品说明 暂时隐藏 -->
           <div>
-            <!--TODO暂时隐藏 <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 :src="stockInfo['music_link']"></iframe> -->
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 :src="stockInfo['music_link']"></iframe>
           </div>
         </el-card>
 
@@ -79,7 +79,7 @@
         </el-card>
 
         <!-- 应援动态-->
-        <YyActive />
+        <YyActive ref="yyActive"/>
 
         <Houbu />
       </el-col>
@@ -94,6 +94,7 @@ import Houbu from "./Detail/Houbu.vue";
 import YyActive from "./Detail/YyActive.vue";
 import AboutMe from "./Detail/AboutMe.vue";
 import Jiaoyi from "./Detail/Jiaoyi.vue";
+import { Bus } from "@/util/bus.js";
 import {
   apiStocks,
   apiWishs
@@ -151,8 +152,7 @@ export default {
     },
 
     handlemm2() {
-      //处理提交许愿喊话
-      // this.dialogForm2Visible = false;
+      //处理提交许愿喊话--许中了需要更新与我相关-应援动态-我的交易
       console.log(this.form2);
       apiWishs({
         code: this.code,
@@ -163,30 +163,12 @@ export default {
           if (res.success) {
             console.log(res);
             // {"success":true,"hard":13,"type":"coin","amount":204464}
-            this.wishTitle = "获得了" + res.amount / 100 + "点援力";
-            // this.getStockInfoWithMe(this.code)
-            apiStocksMy(this.code) //抽到援例/股 去更新与我相关
-              .then(res => {
-                this.myInfo = res;
-                this.value = res.selected;
-                let y = res["wish_count"];
-                let rest = res["wish_limit"] - y;
-                this.$message({
-                  message: "已经许愿" + y + "次，还剩" + rest + "次",
-                  type: "success"
-                }); //{"balance":1359294,"stock_balance":0,"wish_count":1,"wish_limit":100,"selected":true}
-              })
-              .catch(err => {
-                console.log(err);
-              });
-              //TODO告诉子组件去更新数据
-            // apiMyOrdersdeal({code:this.code,status:'padding'}).then(res=>{//去更新我的交易
-            //   console.log(res)
-            // }).catch(err => {
-            //   console.log(err);
-            // });
-            // this.getMydeals(this.code); //去更新我的交易
-            // this.getLoverPower(this.code); //去更新应援动态
+            //{"success":true,"hard":0,"type":"stock","amount":3}
+            this.wishTitle = res.type=='coin' ?  "获得了" + res.amount / 100 + "点援力" : "获得了" + res.amount  + "股票";
+            this.$refs.aboutme.getStockInfoWithMe(this.code)
+              //告诉子组件去更新数据
+              this.$refs.yyActive.getLoverPower(this.code)
+              this.$refs.aboutme.getMydeals(this.code); //去更新我的交易
           } else {
             this.$message({
               message: res.msg,

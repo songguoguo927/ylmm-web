@@ -11,7 +11,7 @@
   </el-card>
 </template>
 <script>
-import { apiMyDeals } from "@/request/api";
+import { apiDeals } from "@/request/api";
 export default {
   name: "DealsRecord",
   data() {
@@ -50,7 +50,7 @@ export default {
     },
     //获取成交记录
     getchengjiaoInfo(code) {
-      apiMyDeals({ code })
+      apiDeals({ code })
         .then(res => {
           console.log(res, "成交记录------------");
           this.chengjiaoInfo = res.data;

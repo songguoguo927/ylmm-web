@@ -21,11 +21,11 @@ export default {
     MFooter,
     Menu
   }, 
-  watch:{
-    $route:function(n,o){
-      console.log(n,o,'app')
-    }
-  }
+  // watch:{
+  //   $route:function(n,o){
+  //     console.log(n,o,'app')
+  //   }
+  // }
 }
 </script>
 <style lang="css" scoped>

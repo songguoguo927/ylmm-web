@@ -3,12 +3,12 @@
     <div slot="header" class="clearfix">
       <span>应援动态</span>
     </div>
-    <divv v-for="(item,index) in yingyuandongtaiInfo" :key="index">
+    <div v-for="(item,index) in yingyuandongtaiInfo" :key="index">
       {{item.user.name}}抽到了
       <span v-if="item.amount">{{item.amount}}股</span>
       <span v-else>援力</span>
       <span>（几秒内）</span>
-    </divv>
+    </div>
   </el-card>
 </template>
 <script>

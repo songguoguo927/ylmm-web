@@ -6,7 +6,8 @@
       <el-table-column label="状态">
         <template slot-scope="scope">
           <el-tag size="medium" v-if="scope.row.status=='进行中'">{{ scope.row.status }}</el-tag>
-          <el-tag type="danger" v-else>{{ scope.row.status }}</el-tag>
+          <el-tag type="danger" v-if="scope.row.status=='取消'">{{ scope.row.status }}</el-tag>
+          <el-tag type="success" v-if="scope.row.status=='已完成'">{{ scope.row.status }}</el-tag>
         </template>
       </el-table-column>
       <!--  padding->进行中,cancel取消 -->
@@ -134,11 +135,19 @@ export default {
         .then(res => {
           console.log(res, "order");
           res.data.forEach(item=>{
-           item.status = item.status=='padding' ? '进行中' : '取消'
+            if(item.status=='padding'){
+              item.status = '进行中'
+            }
+            if(item.status=='success'){
+              item.status = '已完成'
+            }
+            if(item.status=='cancel'){ 
+              item.status='取消' }
            item.price = item.price/100
            item['created_at'] = this.todate(item['created_at'])
           })
           this.alltableData = res.data;
+          console.log(this.alltableData,'======')
         })
         .catch(err => {
           console.log(err);

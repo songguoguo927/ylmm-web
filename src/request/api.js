@@ -14,7 +14,8 @@ export const apiMyOrders = p => get('/api/orders/my', p); //Order
 export const apiMyOrdersPost = p => post('/api/orders', p); //Order 
 // export const apiMyOrdersdeal = p => get('/api/orders/my', p); //Order 
 export const apiMyOrdersCancel = p => post('/api/orders/'+p+'/cancel'); //Order  p订单号
-export const apiMyDeals = p => get('/api/deals', p); //Deals
+export const apiDeals = p => get('/api/deals', p); 
+export const apiMyDeals = p => get('/api/deals/my', p); //Deals table数据
 export const apiWishs = p => post('/api/wishs', p); 
 export const apiWishsget = p => get('/api/wishs', p); 
 export const apiTrendsget = p => get('/api/trends', p); 

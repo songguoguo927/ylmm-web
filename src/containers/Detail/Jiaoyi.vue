@@ -43,12 +43,12 @@
       </el-dialog>
     </div>
     <div style="color:red;margin-bottom:20px">买方</div>
-    <div v-for="(item,index) in buyInfo" :key="index">
+    <div v-for="(item,index) in buyInfo" :key="2*index">
       <span>{{item.user.name}} 想以{{item.price/100}}援力每股的单价，买入 {{item.amount}}（{{item['finished_amount']}}） 股</span>
       <span style="color:gray;float:right">{{todate(item['created_at'])}}</span>
     </div>
     <div style="color:green;margin-bottom:20px;margin-top:20px">卖方</div>
-    <div v-for="(item,index) in saleInfo" :key="index">
+    <div v-for="(item,index) in saleInfo" :key="2*index+1">
       <span>{{item.user.name}} 想以{{item.price/100}}援力每股的单价，卖出 {{Math.abs(item.amount)}}（{{item['finished_amount']}}） 股</span>
       <span style="color:gray;float:right">{{todate(item['created_at'])}}</span>
     </div>
@@ -58,10 +58,11 @@
 import {
   apiStocks,
   apiDealsStatus,
-  apiMyDeals,
   // apiMyOrdersdeal,
   apiMyOrdersPost
 } from "@/request/api";
+import { Bus } from "@/util/bus.js";
+
 export default {
   name: "Jiaoyi",
 
@@ -87,17 +88,13 @@ export default {
     };
   },
   mounted() {
-    // this.fillData();
-    // this.code = this.$route.params.code;
+
     this.code = this.$route.query.code;
-    // this.getStockInfo(this.code);
     this.getSaleAndBuyInfo(this.code);
-    // this.getLoverPower(this.code);
-    // if (Z.getStorage("token")||this.$store.state.isLogin) {
-    //   console.log('--------登录就发起下面的请求')
-    //   this.getStockInfoWithMe(this.code);
-    //   this.getMydeals(this.code)
-    // }
+    let vm = this
+    Bus.$on('getSaleAndBuyInfo',function(code){
+        vm.getSaleAndBuyInfo(code)
+    })
   },
   computed: {},
   methods: {
@@ -175,7 +172,9 @@ export default {
               type: "success"
             });
 
-            // this.getSaleAndBuyInfo(this.code);//需要去告诉兄弟组件去触发TODO+
+            this.getSaleAndBuyInfo(this.code);
+             Bus.$emit('getStockInfoWithMe',this.code)
+              Bus.$emit('getMydeals',this.code)
             // this.getStockInfoWithMe(this.code);//需要去告诉兄弟组件去触发TODO+
             // this.getMydeals(this.code)//需要去告诉兄弟组件去触发TODO+
           } else if (res.error) {

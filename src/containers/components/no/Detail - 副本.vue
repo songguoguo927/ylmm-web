@@ -204,7 +204,7 @@ import {
   apiStocks,
   apiStocksHoldingRank,
   apiDealsStatus,
-  apiMyDeals,
+  apiDeals,
   apiStocksMy,
   apiStocksSelect,
   apiStocksDeSelect,
@@ -388,7 +388,7 @@ export default {
     },
     //获取成交记录
     getchengjiaoInfo(code) {
-      apiMyDeals({ code })
+      apiDeals({ code })
         .then(res => {
           console.log(res,'成交记录------------');
           this.chengjiaoInfo = res.data;

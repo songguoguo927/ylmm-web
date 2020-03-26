@@ -31,7 +31,7 @@
 </template>
 <script>
 import Z from "@/util/localStorage.js";
-
+import { Bus } from "@/util/bus.js";
 import {
   apiStocksMy,
   apiStocksSelect,
@@ -56,6 +56,13 @@ export default {
       this.getStockInfoWithMe(this.code);
       this.getMydeals(this.code);
     }
+    let vm = this
+    Bus.$on('getStockInfoWithMe',function(code){
+        vm.getStockInfoWithMe(code)
+    })
+    Bus.$on('getMydeals',function(code){
+        vm.getMydeals(code)
+    })
   },
   computed: {},
   methods: {
@@ -65,6 +72,7 @@ export default {
           console.log(res, "cancel");
           this.getMydeals(this.code);
           //   this.getSaleAndBuyInfo(this.code)//需要去告诉兄弟组件去触发TODO
+          Bus.$emit('getSaleAndBuyInfo',this.code)
           this.getStockInfoWithMe(this.code);
         })
         .catch(err => {
@@ -90,6 +98,13 @@ export default {
           console.log(res, "与我相关的信息-----iiiii");
           this.myInfo = res;
           this.value = res.selected;
+            let y = res["wish_count"];
+            let rest = res["wish_limit"] - y;
+            this.$message({
+                message: "已经许愿" + y + "次，还剩" + rest + "次",
+                type: "success"
+            }); //{"balance":1359294,"stock_balance":0,"wish_count":1,"wish_limit":100,"selected":true}
+            
         })
         .catch(err => {
           console.log(err);

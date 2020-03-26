@@ -9,7 +9,7 @@
       class="demo-ruleForm"
     >     
     <!-- :rules="rules" -->
-      <el-form-item label="昵称" prop="name">
+      <el-form-item label="账号" prop="name">
         <el-input type="text" v-model="ruleForm['name']" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="昵称" prop="nick_name">
@@ -25,14 +25,16 @@
         <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
       </el-form-item>
     </el-form>
-    <div>{{tip}}</div>
+    <!-- <div>{{tip}}</div> -->
     <div id="sc" style="margin-left:80px;margin-top:0;"></div>
   </div>
   </div>
 </template>
 <script>
-import { apiGeetest,createUser } from "@/request/api";
+import { apiGeetest,createUser,apiLogin } from "@/request/api";
 import Z from '@/util/localStorage.js'
+import { Bus } from "@/util/bus.js";
+
 export default {
   data() {
     var checkAge = (rule, value, callback) => {
@@ -105,16 +107,31 @@ export default {
     },
     newUser(){
       createUser(this.ruleForm).then(res=>{
-        console.log('user',res)  
-        this.tip = '注册成功'+JSON.stringify(res)    
+        // console.log('user',res)  
+        // this.tip = '注册成功'+JSON.stringify(res)    
         if(res.msg){
           this.$message({
           message:res.msg,
-          type:'success'
+          type:'error'
           })
         }else if(res.token){
           Z.setStorage('token',res.token)
         //注册成功返回res { id: 3, token: "a8ZTTSl1tgpKttxgNBMag6lagTF2URAV" }--将token存入本地
+        //以登录的状态跳转至主页
+        apiLogin({
+          name: this.ruleForm.name,
+          password:this.ruleForm.password
+        }).then(res=>{   
+            if(res.token){
+              Bus.$emit('getMyselfInfo')
+              this.$router.push('/')
+            }else{
+                this.$message({
+                message:res.msg+'hahaha',
+                type:'error'
+              })
+            }
+          }) 
         }
       }).catch(error=>{
         console.log(error,'注册失败')

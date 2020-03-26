@@ -63,7 +63,7 @@
           </div>
           <!-- 音乐or作品说明 暂时隐藏 -->
           <div>
-            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 :src="stockInfo['music_link']"></iframe>
+            <!-- <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 :src="stockInfo['music_link']"></iframe> -->
           </div>
         </el-card>
 
@@ -143,7 +143,7 @@ export default {
     getStockInfo(code) {
       apiStocks(code)
         .then(res => {
-          console.log(res, "StockInfo------------");
+          // console.log(res, "StockInfo------------");
           this.stockInfo = res;
         })
         .catch(err => {
@@ -153,7 +153,7 @@ export default {
 
     handlemm2() {
       //处理提交许愿喊话--许中了需要更新与我相关-应援动态-我的交易
-      console.log(this.form2);
+      // console.log(this.form2);
       apiWishs({
         code: this.code,
         lover_power: 88230032862, //搞清楚这个从哪里来TODO
@@ -161,7 +161,7 @@ export default {
       })
         .then(res => {
           if (res.success) {
-            console.log(res);
+            // console.log(res);
             // {"success":true,"hard":13,"type":"coin","amount":204464}
             //{"success":true,"hard":0,"type":"stock","amount":3}
             this.wishTitle = res.type=='coin' ?  "获得了" + res.amount / 100 + "点援力" : "获得了" + res.amount  + "股票";

@@ -128,7 +128,7 @@ export default {
         status: "padding"
       })
         .then(res => {
-          console.log(res, "交易动态salesale");
+        //   console.log(res, "交易动态salesale");
           this.saleInfo = res.data;
         })
         .catch(err => {
@@ -140,7 +140,7 @@ export default {
         status: "padding"
       })
         .then(res => {
-          console.log(res, "交易动态buybuy");
+        //   console.log(res, "交易动态buybuy");
           this.buyInfo = res.data;
         })
         .catch(err => {
@@ -150,7 +150,7 @@ export default {
     handlemm() {
       //处理买卖股份
       this.dialogFormVisible = false;
-      console.log(this.form);
+    //   console.log(this.form);
       if (this.form.radio == "卖出") {
         this.form.amount = -this.form.amount;
       }
@@ -162,10 +162,10 @@ export default {
           reason: this.form.reason
         }
       };
-      console.log(formdata);
+    //   console.log(formdata);
       apiMyOrdersPost(formdata)
         .then(res => {
-          console.log(res);
+        //   console.log(res);
           if (res.success) {
             this.$message({
               message: res.msg,

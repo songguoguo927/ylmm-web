@@ -52,7 +52,7 @@ export default {
   mounted() {
     this.code = this.$route.query.code;
     if (Z.getStorage("token") || this.$store.state.isLogin) {
-      console.log("--------登录就发起下面的请求");
+    //   console.log("--------登录就发起下面的请求");
       this.getStockInfoWithMe(this.code);
       this.getMydeals(this.code);
     }
@@ -69,7 +69,7 @@ export default {
     handleDelete(id) {
       apiMyOrdersCancel(id)
         .then(res => {
-          console.log(res, "cancel");
+        //   console.log(res, "cancel");
           this.getMydeals(this.code);
           //   this.getSaleAndBuyInfo(this.code)//需要去告诉兄弟组件去触发TODO
           Bus.$emit('getSaleAndBuyInfo',this.code)
@@ -84,7 +84,7 @@ export default {
     getMydeals(code) {
       apiMyOrders({ code, status: "padding" })
         .then(res => {
-          console.log(res, "与我相关-我的交易------------------");
+        //   console.log(res, "与我相关-我的交易------------------");
           this.mydealInfo = res.data;
         })
         .catch(err => {
@@ -95,7 +95,7 @@ export default {
     getStockInfoWithMe(code) {
       apiStocksMy(code)
         .then(res => {
-          console.log(res, "与我相关的信息-----iiiii");
+        //   console.log(res, "与我相关的信息-----iiiii");
           this.myInfo = res;
           this.value = res.selected;
             let y = res["wish_count"];
@@ -112,11 +112,11 @@ export default {
     },
 
     handleSwitch(v) {
-      console.log(v);
+    //   console.log(v);
       if (v) {
         apiStocksSelect(this.$route.params.code)
           .then(res => {
-            console.log(res);
+            // console.log(res);
             this.value = true;
           })
           .catch(err => {
@@ -125,7 +125,7 @@ export default {
       } else {
         apiStocksDeSelect(this.$route.params.code)
           .then(res => {
-            console.log(res);
+            // console.log(res);
             this.value = false;
           })
           .catch(err => {

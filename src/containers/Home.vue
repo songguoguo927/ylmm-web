@@ -98,7 +98,7 @@ export default {
       }
     },
     submitKeywordToSearch(v){
-      console.log(v)
+      // console.log(v)
       let sort = this.radio
       this.onload({
         sort:sort,
@@ -109,7 +109,7 @@ export default {
     // 发起请求 params label 获取不同的列表
     onload(p){
       apiStock(p).then(res=>{//allstock
-        console.log(res,'stocks')
+        // console.log(res,'stocks')
         this.showList = res.data
         this.loading = false
       }).catch(error=>{

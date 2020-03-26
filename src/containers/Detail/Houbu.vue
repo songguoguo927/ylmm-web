@@ -59,7 +59,7 @@ export default {
     getHoubuInfo(code) {
       apiStocksHoldingRank(code)
         .then(res => {
-          console.log(res, "候补排位");
+          // console.log(res, "候补排位");
           this.houbuInfo = res.data;
         })
         .catch(err => {

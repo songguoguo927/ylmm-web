@@ -110,7 +110,7 @@ export default {
   methods:{
     onload(){
       apiSuperWishes().then(res=>{
-        console.log(res,'post')
+        // console.log(res,'post')
         this.dataPost = res
       }).catch(err=>{
         console.log(err)

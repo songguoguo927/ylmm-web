@@ -47,7 +47,7 @@ export default {
   methods:{
     onload(){
       apiProfile().then(res=>{
-        console.log(res,'profile')
+        // console.log(res,'profile')
           this.stocksList = res.stocks
           this.coinBalance = res['coin_balance']
           this.capital = res['capital']

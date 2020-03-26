@@ -77,7 +77,7 @@ export default {
         }
       },
       set: function(v) {
-        console.log(v, "---");
+        // console.log(v, "---");
         return v;
       }
     },
@@ -89,7 +89,7 @@ export default {
   },
   methods: {
      handleClickCoverToDetail(code){
-      console.log('查看对应艺人的详情，需要有个id标识',code)
+      // console.log('查看对应艺人的详情，需要有个id标识',code)
       // 跳转至详情页面
       // this.$router.push({
       //   name:'Detail',
@@ -116,10 +116,10 @@ export default {
         return youWant;
     },
     handleDelete(index, row) {
-      console.log(index, row);
+      // console.log(index, row);
       apiMyOrdersCancel(row.id)
         .then(res => {
-          console.log(res, "cancel");
+          // console.log(res, "cancel");
           this.onload({
             code: "",
             status: "",
@@ -133,7 +133,7 @@ export default {
     onload(p) {
       apiMyOrders(p)
         .then(res => {
-          console.log(res, "order");
+          // console.log(res, "order");
           res.data.forEach(item=>{
             if(item.status=='padding'){
               item.status = '进行中'
@@ -147,18 +147,18 @@ export default {
            item['created_at'] = this.todate(item['created_at'])
           })
           this.alltableData = res.data;
-          console.log(this.alltableData,'======')
+          // console.log(this.alltableData,'======')
         })
         .catch(err => {
           console.log(err);
         });
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
       this.defaultPS = val;
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       this.currentPage = val;
       // this.showTableData =  this.alltableData.slice((this.currentPage-1)*this.defaultPS,this.defaultPS*this.currentPage)
     }

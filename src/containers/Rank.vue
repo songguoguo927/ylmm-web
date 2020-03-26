@@ -30,7 +30,7 @@ export default {
   methods:{
     onload(){
       apiRank().then(res=>{
-        console.log(res,'rank')
+        // console.log(res,'rank')
        if(res.data){
           this.rankList = res.data
        }else{

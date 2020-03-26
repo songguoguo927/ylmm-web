@@ -6,7 +6,7 @@
     <div class="lunbo-title">
       <p>恭喜你 发现一枚宝 愿你不枉此行</p>
     </div>
-    <div style="flex:1" class="avatar">
+    <div class="avatar">
       <el-avatar>{{avatarName}}</el-avatar>
     </div>
     <div v-if="!isLogin">
@@ -50,14 +50,14 @@ export default {
   },
   methods: {
     logout(){
-      console.log(11111) 
+      // console.log(11111) 
        this.$router.push('/') //登出跳转 如果在login登出跳转至login会报错
         this.isLogin = false
         this.avatarName = null
         Z.removeStorage('token') 
       apiLogout().then((res)=>{   
              
-        console.log(res,'logout')
+        // console.log(res,'logout')
       }).catch(err=>{
         console.log(err)
       })
@@ -66,7 +66,7 @@ export default {
       apiUser()
         .then(res => {
           //加了token就是自己的user信息
-          console.log(res);
+          // console.log(res);
           // this.username = res.name.slice(0, 3);
           if(res.name){
             this.isLogin=true

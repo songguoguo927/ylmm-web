@@ -47,7 +47,7 @@ export default {
         }
       },
       set:function(v){
-        console.log(v,'---')
+        // console.log(v,'---')
         return v
       }
     },
@@ -60,18 +60,18 @@ export default {
   methods: {
     onload(p){
       apiMyDeals(p).then(res=>{
-        console.log(res,'deals')
+        // console.log(res,'deals')
         this.alltableData = res.data;
       }).catch(err=>{
         console.log(err)
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
       this.defaultPS = val
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      // console.log(`当前页: ${val}`)
       this.currentPage = val;
       // this.showTableData =  this.alltableData.slice((this.currentPage-1)*this.defaultPS,this.defaultPS*this.currentPage)
     }

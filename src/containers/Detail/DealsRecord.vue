@@ -52,7 +52,7 @@ export default {
     getchengjiaoInfo(code) {
       apiDeals({ code })
         .then(res => {
-          console.log(res, "成交记录------------");
+          // console.log(res, "成交记录------------");
           this.chengjiaoInfo = res.data;
         })
         .catch(err => {

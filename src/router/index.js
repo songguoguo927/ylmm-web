@@ -6,7 +6,7 @@ import NotFound from '@/containers/components/NotFound.vue'
 
 Vue.use(Router)
 function check_is_login(){
-  console.log(!!Z.getStorage('token'),'checkis login')
+  // console.log(!!Z.getStorage('token'),'checkis login')
     return Z.getStorage('token')
 }
 /**
@@ -52,7 +52,7 @@ export default new Router({
         path: '/login',
         name: 'Login',
         component: () => 
-          check_is_login() ? NotFound.vue : import('@/containers/components/Login.vue')
+          check_is_login() ? NotFound : import('@/containers/components/Login.vue')
         
       },
       // {
@@ -64,7 +64,7 @@ export default new Router({
         path: '/signup',
         name: 'Signup',
         component: 
-        check_is_login() ? NotFound.vue : () => import('@/containers/components/Signup.vue')
+        () =>  import('@/containers/components/Signup.vue')
       },
       {
         path: '/profile',

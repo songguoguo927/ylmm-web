@@ -38,7 +38,7 @@ export default {
     getLoverPower(code) {
       apiWishsget({ code })
         .then(res => {
-          console.log(res, "应援动态");
+          // console.log(res, "应援动态");
           this.yingyuandongtaiInfo = res.data;
         })
         .catch(err => {

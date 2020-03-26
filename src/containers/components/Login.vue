@@ -19,7 +19,7 @@
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
-      <div>{{userinfo}}--{{res}}</div>
+      <!-- <div>{{userinfo}}--{{res}}</div> -->
       <div id="sc" style="margin-left:80px;margin-top:0;"></div>
     </div>
   </div>
@@ -27,6 +27,7 @@
 <script>
 import { apiLogin,apiUser} from "@/request/api";
 import Z from '@/util/localStorage.js'
+import { Bus } from "@/util/bus.js";
 
 export default {
   data() {
@@ -105,7 +106,7 @@ export default {
     },
     onLoad(p){
       apiLogin(p).then(res=>{
-        console.log('login',res)       
+        // console.log('login',res)       
         if(res.token){
           Z.setStorage('token',res.token)
           this.getMyselfInfo()
@@ -119,11 +120,12 @@ export default {
     },
     getMyselfInfo(){
       apiUser().then(res=>{//加了token就是自己的user信息
-        console.log(res)
+        // console.log(res)
         this.userinfo = true
         this.$store.commit('setAvatarName',res.name)
         this.$store.commit('setwalletAddress',res.address)
         this.res = JSON.stringify(res)
+        this.$router.push('/')
       }).catch(error=>{
         console.log(error)
       })
@@ -133,6 +135,10 @@ export default {
     // this.onLoad()
   },
   mounted() {
+    let vm = this
+    Bus.$on('getMyselfInfo',function(){
+        vm.getMyselfInfo()
+    })
     // window.onload = function() {
     //   var ic = new smartCaptcha({
     //     renderTo: "#sc",

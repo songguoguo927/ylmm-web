@@ -37,7 +37,7 @@ export default {
   props:['showItem'],
   methods: {
     handleClickCoverToDetail(code){
-      console.log('查看对应艺人的详情，需要有个id标识',code)
+      // console.log('查看对应艺人的详情，需要有个id标识',code)
       // 跳转至详情页面
       // this.$router.push({
       //   name:'Detail',

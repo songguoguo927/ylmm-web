@@ -56,7 +56,6 @@
 </template>
 <script>
 import {
-  apiStocks,
   apiDealsStatus,
   // apiMyOrdersdeal,
   apiMyOrdersPost

@@ -1,5 +1,5 @@
 <template>
-  <div style="margin:30px">
+  <div style="margin:30px;">
     <el-row>
       <el-col :sm="24" :md="16">
           <el-radio-group v-model="radio" style="margin-bottom: 20px;" @change="handleRadioClick">
@@ -34,7 +34,7 @@
   </div>
 </template>
 <script>
-import { apiStock } from "@/request/api";
+import { apiStockSort } from "@/request/api";
 
 import Card from "./components/Card.vue";
 export default {
@@ -52,47 +52,52 @@ export default {
       salePriceList: [],
       selectedList: [],
       loading:true,
-      search_keyword:''
+      search_keyword:'',
+      page:1,
+      currentRequestResultisNull:false
     };
   },
   methods: {
     handleRadioClick(label) {
       console.log(label);
       this.radio = label
+      this.page = 1
+      this.showList = []
+      this.currentRequestResultisNull = false
       switch (label) {
         case "hot":
           this.onload({
             sort:'hot',
             keyword:'',
-            page:1
+            page:this.page
           })
           break;
         case "marketValue":
           this.onload({
             sort:'marketValue',
             keyword:'',
-            page:1
+            page:this.page
           })
           break;
         case "buyPrice":
           this.onload({
             sort:'buyPricet',
             keyword:'',
-            page:1
+            page:this.page
           })
           break;
         case "salePrice":
           this.onload({
             sort:'salePrice',
             keyword:'',
-            page:1
+            page:this.page
           })
           break;
         case "selected":
           this.onload({
             sort:'selected',
             keyword:'',
-            page:1
+            page:this.page
           })
           break;
       }
@@ -103,14 +108,15 @@ export default {
       this.onload({
         sort:sort,
         keyword:v,
-        page:1
+        page:this.page
       })
     },
     // 发起请求 params label 获取不同的列表
     onload(p){
-      apiStock(p).then(res=>{//allstock
+      apiStockSort(p).then(res=>{//allstock
         // console.log(res,'stocks')
-        this.showList = res.data
+        if(res.data.length==0) this.currentRequestResultisNull = true
+        this.showList.push(...res.data)
         this.loading = false
       }).catch(error=>{
         console.log(error)
@@ -119,17 +125,56 @@ export default {
   },
   created(){
     this.onload({
-        sort:'hot',
+        sort:this.sort,
         keyword:'',
-        page:1
+        page:this.page
       })
+  },
+  mounted(){
+
+    this.$nextTick(() => {
+      var cardList = document.querySelector('.card-list')
+      cardList.addEventListener('scroll', (e) => {
+        let winInnerHeight = window.innerHeight // 视窗的高度668
+        let cardListHeight = cardList.scrollHeight // 1080 cardList内容的高度calc(100vh - 170px)
+        let cardListScrollTop = e.target.scrollTop // 滚动的高度 最大162 bian
+        if ((cardListScrollTop + winInnerHeight >= cardListHeight + 165) && !this.currentRequestResultisNull ) {
+          this.onload({
+            sort:this.radio,
+            keyword:'',
+            page:++this.page
+          })
+        }
+      })
+    })
   }
 };
 </script>
 <style lang="scss" scoped>
 .card-list{
-  min-height: calc(60vh)
+  min-height: calc(60vh);
+  height:calc(100vh - 170px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-left: 20px;
 }
+// .card-list::-webkit-scrollbar {
+//   width: 0.5rem;
+//   height: 0.5rem;
+//   background: #fff;
+//   border-radius: 0.2rem;
+// }
+// .card-list::-webkit-scrollbar-track {
+//   border-radius: 0.2rem;
+// }
+// .card-list::-webkit-scrollbar-thumb {
+//   background-color: rgba(102,52,153,0.8);
+//   transition: all 0.2s;
+//   border-radius: 0.5rem;
+// }
+// .card-list::-webkit-scrollbar-thumb:hover {
+//   background-color: rgba(102,52,153,0.8);
+// }
 .el-row {
   margin-bottom: 20px;
   &:last-child {

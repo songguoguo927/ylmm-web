@@ -96,7 +96,7 @@ import AboutMe from "./Detail/AboutMe.vue";
 import Jiaoyi from "./Detail/Jiaoyi.vue";
 import { Bus } from "@/util/bus.js";
 import {
-  apiStocks,
+  apiStockCode,
   apiWishs
   // apiWishsget,
 } from "@/request/api";
@@ -141,7 +141,7 @@ export default {
   computed: {},
   methods: {
     getStockInfo(code) {
-      apiStocks(code)
+      apiStockCode(code)
         .then(res => {
           // console.log(res, "StockInfo------------");
           this.stockInfo = res;

@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import { apiUser,apiLogout } from "@/request/api";
+import { apiUser,apiLogout,apiStocksCreate,apiStockAll } from "@/request/api";
 import Z from "@/util/localStorage.js";
 
 export default {
@@ -83,6 +83,28 @@ export default {
     if (Z.getStorage("token")) {
       this.getMyselfInfo();
     }
+    // apiStocksCreate({
+    //   code: 'LISA',
+    //   name: '丽莎',
+    // }).then(res=>{
+    //   console.log(res)
+    // }).catch(err=>{
+    //   console.log(err)
+    // })
+    apiStockAll({
+      stocksAll:true
+    }).then(res=>{
+      console.log(res)
+    }).catch(err=>{
+      console.log(err)
+    })
+    apiUser({
+      usersAll:true
+    }).then(res=>{
+      console.log(res)
+    }).catch(err=>{
+      console.log(err)
+    })
   }
 };
 </script>

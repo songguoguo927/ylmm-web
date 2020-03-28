@@ -24,8 +24,10 @@
         <el-menu-item index="login">登录</el-menu-item>
         <el-menu-item index="signup">注册</el-menu-item>
       </el-submenu> -->
+      <el-menu-item index="/showallstocks"><span class="iconfont icon-help"></span>Admin-stocks</el-menu-item>
+      <el-menu-item index="/showallusers"><span class="iconfont icon-postitpencil"></span>Admin-Users</el-menu-item>
     </el-menu>
-    <div style="margin-top: 124px;">
+    <div>
       <img width="100%" src="@/assets/menuBg.jpg" alt="">
       <!-- <img width="100%" src="@/assets/menuBg2.jpg" alt=""> -->
     </div>

@@ -83,6 +83,16 @@ export default new Router({
         name: 'Deals',
         component: () => 
         import('@/containers/components/Deals.vue')
+      },
+      {
+        path:'/showallstocks',
+        name:'ShowAllStocks',component: () => 
+        import('@/containers/Admin/ShowAllStocks.vue')
+      },
+      {
+        path:'/showallusers',
+        name:'ShowAllUsers',component: () => 
+        import('@/containers/Admin/ShowAllUsers.vue')
       }
   ]
 })

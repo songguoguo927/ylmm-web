@@ -106,9 +106,14 @@ axios.interceptors.response.use(
  * @param {String} url [请求的url地址]
  * @param {Object} params [请求时携带的参数]
  */
+let root = ''
+if(process.env.NODE_ENV==='production'){
+    root = 'http://47.100.222.240:3000'
+}
+console.log(root,process.env.NODE_ENV)
 export function get(url, params){    
     return new Promise((resolve, reject) =>{        
-        axios.get(url, {            
+        axios.get(root+url, {            
             params: params        
         }).then(res => {
             resolve(res.data);
@@ -123,7 +128,7 @@ export function get(url, params){
  */
 export function post(url, params) {
     return new Promise((resolve, reject) => {
-      axios.post(url, params)
+      axios.post(root+url, params)
         .then(res => {
             resolve(res.data);
         })

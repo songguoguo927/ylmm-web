@@ -1,5 +1,5 @@
 <template>
-  <div style="">    
+  <div v-if="this.isShowMenu">    
     <!--mode="horizontal"-->
     <el-menu
       :default-active="activeIndex"
@@ -36,12 +36,27 @@
 <script>
 export default {
   name: "menu",
+  props: {
+    isShowMenu: Boolean,
+  },
   data() {
     return {
       activeIndex: "/",
-      activeIndex2: "1"
+      activeIndex2: "1",
+      isxiaoShow:false,
+
     };
   },
+  computed:{
+    classObject(){
+      return this.screenWidth>992&&this.isShowMenu
+    },
+  },
+  // watch:{
+  //   showShrinkMenu(n){
+  //      document.querySelector('.scrollYMenu').style.overflowY = n ? 'unset' :'scroll'
+  //   },
+  // },
   methods: {
     handleSelect(key, keyPath) {
       // console.log(key, keyPath);

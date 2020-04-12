@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin"); // 引入html-webpack-
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const resolve = dir => path.resolve(__dirname, dir);
 var config = {
-  mode: "development",
+  // mode: "development",
   entry: "./src/main.js",
   devtool: "source-map",
   output: {

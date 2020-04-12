@@ -1,7 +1,7 @@
 <template>
   <div class="lunbo">
-    <div style="flex:1">
-      <img src="@/assets/favicon.png" alt="" style="height: 80%;border-radius: 5px;margin-top:7px">
+    <div style="flex:1" @click="changeIsShowMenu">
+      <img src="@/assets/menu.png" alt="" style="">
     </div>
     <div class="lunbo-title">
       <p>恭喜你 发现一枚宝 愿你不枉此行</p>
@@ -29,6 +29,9 @@ export default {
       // userinfo: "未登"
       // username:''
     };
+  },
+   props: {
+    changeIsShowMenu:Function
   },
   computed:{
     avatarName:{
@@ -77,7 +80,12 @@ export default {
         .catch(error => {
           console.log(error);
         });
-    }
+    },
+    // changeIsShowMenu(){
+    //   console.log('11111111111111111111111')
+    //   this.$emit('changeIsShowMenu',true)
+    // }
+
   },
   mounted() {
     if (Z.getStorage("token")) {
@@ -99,9 +107,12 @@ export default {
   color: #fff;
   // text-align: center;
   font-weight: 600;
-  position: relative;
+  // position: relative;
   background: rebeccapurple;
   opacity: 0.8;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 .lunbo-title {
   flex: 3;

@@ -7,7 +7,7 @@
             <el-radio-button label="marketValue">市值排序</el-radio-button>
             <el-radio-button label="buyPrice">高价收购</el-radio-button>
             <el-radio-button label="salePrice">低价出让</el-radio-button>
-            <el-radio-button label="selected">特别关注</el-radio-button>
+            <el-radio-button label="selected" v-if="$store.state.isLogin">特别关注</el-radio-button>
           </el-radio-group>
       </el-col>
       <el-col :sm="24" :md="8">
